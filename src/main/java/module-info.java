@@ -5,6 +5,7 @@ module com.pppfkp.javabank {
     requires org.hibernate.orm.core;
     requires java.naming;
     requires jakarta.persistence;
+    requires jbcrypt;
 
 
     opens com.pppfkp.javabank to javafx.fxml;

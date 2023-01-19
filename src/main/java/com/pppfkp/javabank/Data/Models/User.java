@@ -33,7 +33,7 @@ public class User {
     private byte[] passwordHash;
 
     @Column(name = "Salt", nullable = false)
-    private UUID salt;
+    private String salt;
 
     @Column(name = "PhoneNumber", nullable = false, length = 9)
     private String phoneNumber;
@@ -121,11 +121,11 @@ public class User {
         this.passwordHash = passwordHash;
     }
 
-    public UUID getSalt() {
+    public String getSalt() {
         return salt;
     }
 
-    public void setSalt(UUID salt) {
+    public void setSalt(String salt) {
         this.salt = salt;
     }
 

@@ -1,11 +1,17 @@
 package com.pppfkp.javabank.Data.DTOs;
 
 import com.pppfkp.javabank.Data.Models.Account;
-
+import com.pppfkp.javabank.Data.Models.User;
+import org.mindrot.jbcrypt.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
-public class UserDTO {
+public class UserDTO implements IMapableTo<User> {
     private String userLogin;
+
+    private String password;
     private String firstName;
     private String lastName;
     private String email;
@@ -20,8 +26,9 @@ public class UserDTO {
     private String addressNumber;
     private String addressFlatNumber;
     private Account defaultAccount;
+    private String cityOfBirth;
 
-    public UserDTO(String userLogin, String firstName, String lastName, String email, Boolean usesPhoneTransfer, String phoneNumber, String pesel, LocalDate birthdate, Boolean allowsMoneyRequests, String addressCity, String addressPostalCode, String addressStreet, String addressNumber, String addressFlatNumber, Account defaultAccount) {
+    public UserDTO(String userLogin, String firstName, String lastName, String email, Boolean usesPhoneTransfer, String phoneNumber, String pesel, LocalDate birthdate, Boolean allowsMoneyRequests, String cityOfBirth, String addressCity, String addressPostalCode, String addressStreet, String addressNumber, String addressFlatNumber, Account defaultAccount, String password) {
         this.userLogin = userLogin;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -37,6 +44,24 @@ public class UserDTO {
         this.addressNumber = addressNumber;
         this.addressFlatNumber = addressFlatNumber;
         this.defaultAccount = defaultAccount;
+        this.password = password;
+        this.cityOfBirth = cityOfBirth;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getCityOfBirth() {
+        return cityOfBirth;
+    }
+
+    public void setCityOfBirth(String cityOfBirth) {
+        this.cityOfBirth = cityOfBirth;
     }
 
     public String getUserLogin() {
@@ -157,5 +182,39 @@ public class UserDTO {
 
     public void setDefaultAccount(Account defaultAccount) {
         this.defaultAccount = defaultAccount;
+    }
+
+    @Override
+    public User MapToEntityTypeNewRecord() {
+        User user = new User();
+        user.setAddressCity(this.addressCity);
+        user.setAddressNumber(this.addressNumber);
+        user.setBirthdate(this.birthdate);
+        user.setUserLogin(this.userLogin);
+        user.setEmail(this.email);
+        user.setAddressFlatNumber(this.addressFlatNumber);
+        user.setAddressPostalCode(this.addressPostalCode);
+        user.setDefaultAccount(null);
+        user.setAddressStreet(this.addressStreet);
+        user.setFirstName(this.firstName);
+        user.setLastName(this.lastName);
+        user.setUsesPhoneTransfer(this.usesPhoneTransfer);
+        user.setPhoneNumber(this.phoneNumber);
+        user.setAllowsMoneyRequests(this.allowsMoneyRequests);
+        user.setCityOfBirth(this.cityOfBirth);
+        user.setPesel(this.getPesel());
+
+        //encrypt a password
+        String salt = BCrypt.gensalt(12);
+        byte[] passwordHash = BCrypt.hashpw(password, salt).getBytes();
+        user.setSalt(salt);
+        user.setPasswordHash(passwordHash);
+        return user;
+    }
+
+    @Override
+    public List<String> Validate() {
+        List<String> errorList = new ArrayList<String>();
+        return errorList;
     }
 }

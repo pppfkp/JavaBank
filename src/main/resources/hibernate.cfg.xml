@@ -9,6 +9,8 @@
         <property name="hibernate.connection.url">jdbc:sqlserver://pppfkp-university-java.database.windows.net:1433;database=JAVA_BANK;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;</property>
         <property name="hibernate.connection.username">pppfkp@pppfkp-university-java</property>
         <property name="hibernate.connection.password">Password2137</property>
+        <property name="connection.pool_size">1</property>
+        <property name="hibernate.c3p0.timeout">0</property>
         <property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
         <property name="show_sql">true</property>
         <property name="hbm2ddl.auto">update</property>

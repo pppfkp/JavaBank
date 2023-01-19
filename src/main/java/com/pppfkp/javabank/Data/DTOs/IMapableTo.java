@@ -1,5 +1,8 @@
 package com.pppfkp.javabank.Data.DTOs;
 
+import java.util.List;
+
 public interface IMapableTo<EntityType> {
-    EntityType MapToEntityType();
+    EntityType MapToEntityTypeNewRecord();
+    List<String> Validate();
 }

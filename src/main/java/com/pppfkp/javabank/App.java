@@ -1,24 +1,17 @@
 package com.pppfkp.javabank;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 import com.pppfkp.javabank.Data.Connection.HibernateConnectUtility;
+import com.pppfkp.javabank.Data.DTOs.UserDTO;
 import com.pppfkp.javabank.Data.Models.User;
+import com.pppfkp.javabank.Services.Repositories.UserRepository;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.hibernate.query.Query;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class App extends Application {
@@ -34,6 +27,7 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
+        UserRepository userRepository = new UserRepository(HibernateConnectUtility.getSessionFactory());
         //launch();
         /*
         String connectionUrl = "jdbc:sqlserver://pppfkp-university-java.database.windows.net:1433;database=JAVA_BANK;user=pppfkp@pppfkp-university-java;password=Password2137;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
@@ -52,7 +46,9 @@ public class App extends Application {
             e.printStackTrace();
         }
         */
-        Session session = HibernateConnectUtility.getSession().openSession();
+        /*
+        //SELECT test
+        Session session = HibernateConnectUtility.getSessionFactory().openSession();
         String SELECT = "FROM User";
         Query q = session.createQuery(SELECT, User.class);
         List<User> resultList = (List<User>) q.list();
@@ -61,6 +57,23 @@ public class App extends Application {
             System.out.println(user.getFirstName() + " " + user.getLastName() + " " + user.getPasswordHash());
         }
         session.close();
-        
+        */
+
+        /*
+        //CREATE test
+        UserDTO newUser = new UserDTO("pppfkp1", "daniel", "wojtowicz", "kuba@gej.pl", true, "111111111", "01262201499", LocalDate.of(2001,10,5), true, "Słotowa", "Rzeszow", "33162", "Lukasiewicza", "2", "115", null, "21376969");
+
+        Integer createdUserId = userRepository.CreateUser(newUser);
+        System.out.println(createdUserId);
+        */
+
+        //System.out.println(userRepository.GetUserById(100));
+       /*
+        for (var user : userRepository.GetAllUsers()) {
+            System.out.println(user.getFirstName());
+        }
+        */
+        HibernateConnectUtility.CloseConnection();
+        System.exit(0);
     }
 }
