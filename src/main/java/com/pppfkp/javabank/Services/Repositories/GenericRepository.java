@@ -50,4 +50,19 @@ public class GenericRepository<DataType, DataDTOType extends IMapableTo<DataType
         return results;
      }
 
+     boolean UpdateRecord(DataDTOType dto, IdType id) {
+         List<String> validationErrors = dto.Validate();
+         Session session = sessionFactory.openSession();
+         if (!validationErrors.isEmpty()) {
+             session.close();
+             return false;
+         }
+         DataType oldRecord = GetSingleRecordById(id);
+         DataType recordToCreate = dto.MapToEntityTypeUpdateRecord(oldRecord);
+         session.update(recordToCreate);
+         //add Comparable check by value;
+         session.close();
+         return true;
+     }
+
 }

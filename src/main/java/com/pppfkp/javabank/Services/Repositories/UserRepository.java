@@ -30,6 +30,13 @@ public class UserRepository{
         return baseRepository.GetAllRecords();
     }
 
+    public boolean UpdateUser(UserDTO dto, Integer oldUserId)
+    {
+        return baseRepository.UpdateRecord(dto, oldUserId);
+    }
+
+
+
 
 
 

@@ -68,10 +68,16 @@ public class App extends Application {
         */
 
         //System.out.println(userRepository.GetUserById(100));
-       /*
+        /*
         for (var user : userRepository.GetAllUsers()) {
             System.out.println(user.getFirstName());
         }
+        */
+        /*
+        //UPDATE TEST
+        UserDTO newUser = new UserDTO("pppfkp1", "daniel", "gejowicz", "kuba@gej.pl", true, "111111111", "01262201499", LocalDate.of(2001,10,5), true, "Słotowa", "Rzeszow", "33162", "Lukasiewicza", "2", "115", null, "21376969");
+
+        System.out.println(userRepository.UpdateUser(newUser, 9));
         */
         HibernateConnectUtility.CloseConnection();
         System.exit(0);

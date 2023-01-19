@@ -10,7 +10,6 @@ import java.util.UUID;
 
 public class UserDTO implements IMapableTo<User> {
     private String userLogin;
-
     private String password;
     private String firstName;
     private String lastName;
@@ -213,8 +212,40 @@ public class UserDTO implements IMapableTo<User> {
     }
 
     @Override
+    public User MapToEntityTypeUpdateRecord(User userToUpdate) {
+        User modifiedRecord = new User();
+        SetUpdatableFields(modifiedRecord);
+        SetNonUpdatableFieldsFromOldRecord(modifiedRecord, userToUpdate);
+        return modifiedRecord;
+    }
+
+    @Override
     public List<String> Validate() {
         List<String> errorList = new ArrayList<String>();
         return errorList;
+    }
+
+    private void SetUpdatableFields(User user) {
+        user.setAddressCity(this.addressCity);
+        user.setAddressNumber(this.addressNumber);
+        user.setBirthdate(this.birthdate);
+        user.setUserLogin(this.userLogin);
+        user.setEmail(this.email);
+        user.setAddressFlatNumber(this.addressFlatNumber);
+        user.setAddressPostalCode(this.addressPostalCode);
+        user.setDefaultAccount(this.defaultAccount);
+        user.setAddressStreet(this.addressStreet);
+        user.setFirstName(this.firstName);
+        user.setLastName(this.lastName);
+        user.setUsesPhoneTransfer(this.usesPhoneTransfer);
+        user.setPhoneNumber(this.phoneNumber);
+        user.setAllowsMoneyRequests(this.allowsMoneyRequests);
+    }
+
+    private void SetNonUpdatableFieldsFromOldRecord(User newUser, User oldUser) {
+        newUser.setPesel(oldUser.getPesel());
+        newUser.setId(oldUser.getId());
+        newUser.setCityOfBirth(oldUser.getCityOfBirth());
+        newUser.setBirthdate(oldUser.getBirthdate());
     }
 }
