@@ -10,16 +10,22 @@ import java.util.Set;
 @Table(name = "ACCOUNTS")
 public class Account {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "AccountId", nullable = false, length = 26)
     private String id;
 
     @Column(name = "TransferLimit", precision = 9, scale = 2)
     private BigDecimal transferLimit;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "AccountTypeId", nullable = false)
     private AccountType accountType;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "UserId", nullable = false)
+    private User user;
+
+    @Column(name = "SoftDeleted")
+    private Boolean softDeleted;
 
     @OneToMany(mappedBy = "defaultAccount")
     private Set<User> users = new LinkedHashSet<>();
@@ -29,6 +35,22 @@ public class Account {
 
     @OneToMany(mappedBy = "senderAccount")
     private Set<Transaction> transactionsFrom = new LinkedHashSet<>();
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Boolean getSoftDeleted() {
+        return softDeleted;
+    }
+
+    public void setSoftDeleted(Boolean softDeleted) {
+        this.softDeleted = softDeleted;
+    }
 
     public String getId() {
         return id;

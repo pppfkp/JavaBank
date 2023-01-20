@@ -1,16 +1,23 @@
 package com.pppfkp.javabank.Data.DTOs;
 
+import com.pppfkp.javabank.Data.Models.Account;
 import com.pppfkp.javabank.Data.Models.AccountType;
+import com.pppfkp.javabank.Data.Models.User;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
-public class AccountDTO {
+public class AccountDTO implements IMapableTo<Account> {
     private BigDecimal transferLimit;
     private AccountType accountType;
+    private User user;
 
-    public AccountDTO(BigDecimal transferLimit, AccountType accountType) {
+    public AccountDTO(BigDecimal transferLimit, AccountType accountType, User user) {
         this.transferLimit = transferLimit;
         this.accountType = accountType;
+        this.user = user;
     }
 
 
@@ -29,4 +36,55 @@ public class AccountDTO {
     public void setAccountType(AccountType accountType) {
         this.accountType = accountType;
     }
+
+    @Override
+    public Account MapToEntityTypeNewRecord() {
+        if(!ValidateAll().isEmpty()) return null;
+        Account account = new Account();
+        setUpdatableFields(account);
+        account.setId(generateAccountNumber());
+        account.setUser(this.user);
+        return account;
+    }
+
+    @Override
+    public Account MapToEntityTypeUpdateRecord(Account recordToUpdate) {
+        if (!ValidateUpdatable().isEmpty()) return  null;
+        setUpdatableFields(recordToUpdate);
+        return recordToUpdate;
+    }
+
+    @Override
+    public List<String> ValidateUpdatable() {
+        List<String> errorList = new ArrayList<String>();
+        return errorList;
+    }
+
+    @Override
+    public List<String> ValidateAll() {
+        List<String> errorList = new ArrayList<String>();
+        return errorList;
+    }
+    private void setUpdatableFields(Account account) {
+        account.setTransferLimit(this.transferLimit);
+        account.setAccountType(this.accountType);
+    }
+   private String generateAccountNumber() {
+        Random rand = new Random();
+
+        long x = (long)(rand.nextDouble()*10000000000000000L);
+
+        String s = String.valueOf(sumOfDigits(x)) + "20011234" + String.format("%016d", x);
+       System.out.println(s);
+        return s;
+   }
+   private int sumOfDigits(long number) {
+       long sum = 0;
+       while (number > 0) {
+           long lastDigit = number % 10;
+           sum += lastDigit;
+           number /= 10;
+       }
+       return Math.toIntExact(sum % 99);
+   }
 }

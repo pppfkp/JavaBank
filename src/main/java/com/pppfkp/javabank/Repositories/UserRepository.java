@@ -1,6 +1,7 @@
 package com.pppfkp.javabank.Repositories;
 
 import com.pppfkp.javabank.Data.DTOs.UserDTO;
+import com.pppfkp.javabank.Data.Models.Account;
 import com.pppfkp.javabank.Data.Models.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -69,5 +70,19 @@ public class UserRepository{
             return false;
         }
         return BCrypt.checkpw(password, user.getPasswordHash());
+    }
+    public boolean SoftDeleteUser(Integer id) {
+        User userToSoftDelete = GetUserById(id);
+        if (userToSoftDelete == null) return false;
+        Session session = baseRepository.getSessionFactory().openSession();
+        try {
+            session.beginTransaction();
+           userToSoftDelete.setSoftDeleted(true);
+            session.update(userToSoftDelete);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
+        return  true;
     }
 }

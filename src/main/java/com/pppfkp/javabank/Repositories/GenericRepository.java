@@ -39,9 +39,15 @@ public class GenericRepository<DataType, DataDTOType extends IMapableTo<DataType
         return result;
      }
     IdType CreateRecord(DataType data) {
+        IdType result;
         Session session = sessionFactory.openSession();
-        IdType result = (IdType) session.save(data);
-        session.close();
+        try {
+            session.beginTransaction();
+            result = (IdType) session.save(data);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
         return result;
     }
     //READ
@@ -51,6 +57,7 @@ public class GenericRepository<DataType, DataDTOType extends IMapableTo<DataType
         session.close();
         return record;
     }
+
     List<DataType> GetAllRecords() {
         Session session = sessionFactory.openSession();
         List<DataType> results = new ArrayList<DataType>();
@@ -65,6 +72,14 @@ public class GenericRepository<DataType, DataDTOType extends IMapableTo<DataType
         DataType record = query.setMaxResults(1).getSingleResultOrNull();
         session.close();
         return record;
+    }
+    List<DataType> GetAllRecordsByFieldValue(String fieldName, String fieldValue) {
+        Session session = getSessionFactory().openSession();
+        Query<DataType> query = session.createQuery("from " +  dataTypeClass.getSimpleName() + " t where t." + fieldName + "=:par", dataTypeClass);
+        query.setParameter("par", fieldValue);
+        List<DataType> records = query.list();
+        session.close();
+        return records;
     }
     //UPDATE
     //TODO check if success

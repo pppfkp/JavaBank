@@ -74,11 +74,22 @@ public class User {
     @JoinColumn(name = "DefaultAccountId")
     private Account defaultAccount;
 
+    @Column(name = "SoftDeleted")
+    private Boolean softDeleted;
+
     @OneToMany(mappedBy = "requestRecipientUser")
     private Set<MoneyRequest> moneyRequestsReceived = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "requestSenderUser")
     private Set<MoneyRequest> moneyRequestsSent = new LinkedHashSet<>();
+
+    public Boolean getSoftDeleted() {
+        return softDeleted;
+    }
+
+    public void setSoftDeleted(Boolean softDeleted) {
+        this.softDeleted = softDeleted;
+    }
 
     public Integer getId() {
         return id;

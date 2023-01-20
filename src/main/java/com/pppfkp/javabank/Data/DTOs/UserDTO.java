@@ -6,7 +6,6 @@ import org.mindrot.jbcrypt.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class UserDTO implements IMapableTo<User> {
     private String userLogin;
@@ -187,7 +186,7 @@ public class UserDTO implements IMapableTo<User> {
     public User MapToEntityTypeNewRecord() {
         if(!ValidateAll().isEmpty()) return null;
         User user = new User();
-        SetUpdatableFields(user);
+        setUpdatableFields(user);
         user.setBirthdate(this.birthdate);
         user.setCityOfBirth(this.cityOfBirth);
         user.setPesel(this.getPesel());
@@ -199,7 +198,8 @@ public class UserDTO implements IMapableTo<User> {
 
     @Override
     public User MapToEntityTypeUpdateRecord(User userToUpdate) {
-        SetUpdatableFields(userToUpdate);
+        if (!ValidateUpdatable().isEmpty()) return null;
+        setUpdatableFields(userToUpdate);
         return userToUpdate;
     }
 
@@ -215,10 +215,9 @@ public class UserDTO implements IMapableTo<User> {
         return errorList;
     }
 
-    private void SetUpdatableFields(User user) {
+    private void setUpdatableFields(User user) {
         user.setAddressCity(this.addressCity);
         user.setAddressNumber(this.addressNumber);
-        user.setBirthdate(this.birthdate);
         user.setUserLogin(this.userLogin);
         user.setEmail(this.email);
         user.setAddressFlatNumber(this.addressFlatNumber);
