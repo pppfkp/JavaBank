@@ -1,4 +1,4 @@
-package com.pppfkp.javabank.Services.Repositories;
+package com.pppfkp.javabank.Repositories;
 
 import com.pppfkp.javabank.Data.DTOs.IMapableTo;
 import org.hibernate.Session;

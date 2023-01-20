@@ -1,4 +1,4 @@
-package com.pppfkp.javabank.Services.Repositories;
+package com.pppfkp.javabank.Repositories;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.pppfkp.javabank.Services.Repositories;
+package com.pppfkp.javabank.Repositories;
 
 import com.pppfkp.javabank.Data.DTOs.UserDTO;
 import com.pppfkp.javabank.Data.Models.User;
@@ -12,7 +12,6 @@ import java.util.List;
 public class UserRepository{
     private SessionFactory sessionFactory;
     private GenericRepository<User, UserDTO, Integer> baseRepository;
-    private static User currentUser;
 
     public UserRepository(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
@@ -42,10 +41,7 @@ public class UserRepository{
     public boolean DeleteUser(Integer id) {
         return baseRepository.DeleteRecord(id);
     }
-    public static User getCurrentUser() {
-        return currentUser;
-    }
-    private User getUserByLogin(String login) {
+    public User getUserByLogin(String login) {
         Session session = baseRepository.getSessionFactory().openSession();
         User user = session.byNaturalId(User.class)
                 .using("userLogin", login)
@@ -72,12 +68,6 @@ public class UserRepository{
         if (user == null) {
             return false;
         }
-        boolean authenticationResult =  BCrypt.checkpw(password, user.getPasswordHash());
-        if (authenticationResult) {
-            currentUser = user;
-            return true;
-        } else {
-            return  false;
-        }
+        return BCrypt.checkpw(password, user.getPasswordHash());
     }
 }

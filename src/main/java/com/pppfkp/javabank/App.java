@@ -2,8 +2,9 @@ package com.pppfkp.javabank;
 
 import com.pppfkp.javabank.Data.Connection.HibernateConnectUtility;
 import com.pppfkp.javabank.Data.DTOs.UserDTO;
-import com.pppfkp.javabank.Services.Repositories.UserRepository;
+import com.pppfkp.javabank.Repositories.UserRepository;
 
+import com.pppfkp.javabank.Services.SignInService;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -76,7 +77,8 @@ public class App extends Application {
 
         System.out.println(userRepository.DeleteUser(10));
         */
-        System.out.println(userRepository.AuthenticateUser("pppfkp1", "21376969"));
+        SignInService signInService = new SignInService(userRepository);
+        System.out.println(signInService.SignIn("pppfkp1", "21376969"));
 
 
 
