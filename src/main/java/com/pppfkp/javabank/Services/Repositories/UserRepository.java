@@ -35,6 +35,10 @@ public class UserRepository{
         return baseRepository.UpdateRecord(dto, oldUserId);
     }
 
+    public boolean DeleteUser(Integer id) {
+        return baseRepository.DeleteRecord(id);
+    }
+
 
 
 

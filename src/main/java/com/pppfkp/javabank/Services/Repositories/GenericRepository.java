@@ -10,6 +10,7 @@ import java.util.List;
 public class GenericRepository<DataType, DataDTOType extends IMapableTo<DataType>, IdType> {
     private SessionFactory sessionFactory;
     private Class<DataType> dataTypeClass;
+
     public GenericRepository(SessionFactory sessionFactory, Class<DataType> dataTypeClass) {
         this.sessionFactory = sessionFactory;
         this.dataTypeClass = dataTypeClass;
@@ -19,9 +20,8 @@ public class GenericRepository<DataType, DataDTOType extends IMapableTo<DataType
         return sessionFactory;
     }
 
-
-
-     IdType CreateRecord(DataDTOType dto) {
+    //CREATE
+    IdType CreateRecord(DataDTOType dto) {
         List<String> validationErrors = dto.Validate();
         Session session = sessionFactory.openSession();
         if (!validationErrors.isEmpty()) {
@@ -34,35 +34,50 @@ public class GenericRepository<DataType, DataDTOType extends IMapableTo<DataType
         session.close();
         return result;
      }
-
-     DataType GetSingleRecordById(IdType id) {
+    //READ
+    DataType GetSingleRecordById(IdType id) {
         Session session = sessionFactory.openSession();
         DataType record = session.get(dataTypeClass, id);
         session.close();
         return record;
-     }
-
-     List<DataType> GetAllRecords() {
+    }
+    List<DataType> GetAllRecords() {
         Session session = sessionFactory.openSession();
         List<DataType> results = new ArrayList<DataType>();
         results = (List<DataType>) session.createQuery("from " + dataTypeClass.getSimpleName()).list();
         session.close();
         return results;
      }
-
-     boolean UpdateRecord(DataDTOType dto, IdType id) {
+    //UPDATE
+    boolean UpdateRecord(DataDTOType dto, IdType id) {
          List<String> validationErrors = dto.Validate();
          Session session = sessionFactory.openSession();
          if (!validationErrors.isEmpty()) {
              session.close();
              return false;
          }
-         DataType oldRecord = GetSingleRecordById(id);
-         DataType recordToCreate = dto.MapToEntityTypeUpdateRecord(oldRecord);
-         session.update(recordToCreate);
-         //add Comparable check by value;
-         session.close();
+         try {
+             session.beginTransaction();
+             DataType data = session.get(dataTypeClass, id);
+             dto.MapToEntityTypeUpdateRecord(data);
+             session.getTransaction().commit();
+         } finally {
+             session.close();
+         }
          return true;
      }
-
+    //DELETE
+    boolean DeleteRecord(IdType id) {
+        Session session = sessionFactory.openSession();
+        try {
+            session.beginTransaction();
+            DataType data = session.get(dataTypeClass, id);
+            session.delete(data);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
+        //check if element still exists
+        return true;
+     }
 }

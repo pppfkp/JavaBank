@@ -213,10 +213,8 @@ public class UserDTO implements IMapableTo<User> {
 
     @Override
     public User MapToEntityTypeUpdateRecord(User userToUpdate) {
-        User modifiedRecord = new User();
-        SetUpdatableFields(modifiedRecord);
-        SetNonUpdatableFieldsFromOldRecord(modifiedRecord, userToUpdate);
-        return modifiedRecord;
+        SetUpdatableFields(userToUpdate);
+        return userToUpdate;
     }
 
     @Override
@@ -240,12 +238,5 @@ public class UserDTO implements IMapableTo<User> {
         user.setUsesPhoneTransfer(this.usesPhoneTransfer);
         user.setPhoneNumber(this.phoneNumber);
         user.setAllowsMoneyRequests(this.allowsMoneyRequests);
-    }
-
-    private void SetNonUpdatableFieldsFromOldRecord(User newUser, User oldUser) {
-        newUser.setPesel(oldUser.getPesel());
-        newUser.setId(oldUser.getId());
-        newUser.setCityOfBirth(oldUser.getCityOfBirth());
-        newUser.setBirthdate(oldUser.getBirthdate());
     }
 }

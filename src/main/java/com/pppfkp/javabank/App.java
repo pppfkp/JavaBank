@@ -65,8 +65,7 @@ public class App extends Application {
 
         Integer createdUserId = userRepository.CreateUser(newUser);
         System.out.println(createdUserId);
-        */
-
+*/
         //System.out.println(userRepository.GetUserById(100));
         /*
         for (var user : userRepository.GetAllUsers()) {
@@ -75,10 +74,11 @@ public class App extends Application {
         */
         /*
         //UPDATE TEST
-        UserDTO newUser = new UserDTO("pppfkp1", "daniel", "gejowicz", "kuba@gej.pl", true, "111111111", "01262201499", LocalDate.of(2001,10,5), true, "Słotowa", "Rzeszow", "33162", "Lukasiewicza", "2", "115", null, "21376969");
+        UserDTO updatedUser = new UserDTO("pppfkp1", "daniel", "gejowicz", "kuba2137@gej.pl", true, "111111111", "01262201499", LocalDate.of(2001,10,5), true, "Słotowa", "Rzeszow", "33162", "Lukasiewicza", "2", "115", null, "21376969");
 
-        System.out.println(userRepository.UpdateUser(newUser, 9));
+        System.out.println(userRepository.UpdateUser(updatedUser, 10));
         */
+        System.out.println(userRepository.DeleteUser(10));
         HibernateConnectUtility.CloseConnection();
         System.exit(0);
     }
