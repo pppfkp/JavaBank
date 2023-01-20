@@ -6,6 +6,7 @@ import com.pppfkp.javabank.Data.Models.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -49,6 +50,21 @@ public class AccountRepository {
             session.beginTransaction();
             accountToSoftDelete.setSoftDeleted(true);
             session.update(accountToSoftDelete);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
+        return  true;
+    }
+    public boolean ChangeBalance(BigDecimal newBalance, String id) {
+        if (newBalance.intValue() < 0) return false;
+        Account accountToChangeBalance = GetAccountById(id);
+
+        Session session = baseRepository.getSessionFactory().openSession();
+        try {
+            session.beginTransaction();
+            accountToChangeBalance.setBalance(newBalance);
+            session.update(accountToChangeBalance);
             session.getTransaction().commit();
         } finally {
             session.close();

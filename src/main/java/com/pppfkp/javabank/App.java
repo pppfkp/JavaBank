@@ -109,6 +109,8 @@ public class App extends Application {
         userRepository.SoftDeleteUser(23);
         System.out.println(userRepository.GetUserById(23).getSoftDeleted());
 
+        accountRepository.ChangeBalance(new BigDecimal(69000), "81200112344175603185079988");
+
         HibernateConnectUtility.CloseConnection();
         System.exit(0);
     }

@@ -44,6 +44,7 @@ public class AccountDTO implements IMapableTo<Account> {
         setUpdatableFields(account);
         account.setId(generateAccountNumber());
         account.setUser(this.user);
+        account.setBalance(new BigDecimal(0));
         return account;
     }
 

@@ -16,6 +16,9 @@ public class Account {
     @Column(name = "TransferLimit", precision = 9, scale = 2)
     private BigDecimal transferLimit;
 
+    @Column(name = "Balance", precision = 9, scale = 2)
+    private BigDecimal balance;
+
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "AccountTypeId", nullable = false)
     private AccountType accountType;
@@ -74,6 +77,14 @@ public class Account {
 
     public void setAccountType(AccountType accountType) {
         this.accountType = accountType;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 
     public Set<User> getUsers() {
