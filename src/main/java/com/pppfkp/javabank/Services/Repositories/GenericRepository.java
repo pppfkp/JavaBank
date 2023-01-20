@@ -3,6 +3,7 @@ package com.pppfkp.javabank.Services.Repositories;
 import com.pppfkp.javabank.Data.DTOs.IMapableTo;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,8 @@ import java.util.List;
 public class GenericRepository<DataType, DataDTOType extends IMapableTo<DataType>, IdType> {
     private SessionFactory sessionFactory;
     private Class<DataType> dataTypeClass;
+
+    private List<String> validationErrors;
 
     public GenericRepository(SessionFactory sessionFactory, Class<DataType> dataTypeClass) {
         this.sessionFactory = sessionFactory;
@@ -35,6 +38,12 @@ public class GenericRepository<DataType, DataDTOType extends IMapableTo<DataType
         session.close();
         return result;
      }
+    IdType CreateRecord(DataType data) {
+        Session session = sessionFactory.openSession();
+        IdType result = (IdType) session.save(data);
+        session.close();
+        return result;
+    }
     //READ
     DataType GetSingleRecordById(IdType id) {
         Session session = sessionFactory.openSession();
@@ -49,6 +58,14 @@ public class GenericRepository<DataType, DataDTOType extends IMapableTo<DataType
         session.close();
         return results;
      }
+    DataType GetSingleRecordByFieldValue(String fieldName, String fieldValue) {
+        Session session = getSessionFactory().openSession();
+        Query<DataType> query = session.createQuery("from " +  dataTypeClass.getSimpleName() + " t where t." + fieldName + "=:par", dataTypeClass);
+        query.setParameter("par", fieldValue);
+        DataType record = query.setMaxResults(1).getSingleResultOrNull();
+        session.close();
+        return record;
+    }
     //UPDATE
     //TODO check if success
     boolean UpdateRecord(DataDTOType dto, IdType id) {
@@ -63,6 +80,11 @@ public class GenericRepository<DataType, DataDTOType extends IMapableTo<DataType
          try {
              session.beginTransaction();
              DataType data = session.get(dataTypeClass, id);
+             if (data == null) {
+                 session.getTransaction().rollback();
+                 session.close();
+                 return false;
+             }
              dto.MapToEntityTypeUpdateRecord(data);
              session.getTransaction().commit();
          } finally {

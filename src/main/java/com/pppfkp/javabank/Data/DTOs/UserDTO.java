@@ -185,21 +185,10 @@ public class UserDTO implements IMapableTo<User> {
 
     @Override
     public User MapToEntityTypeNewRecord() {
+        if(!ValidateAll().isEmpty()) return null;
         User user = new User();
-        user.setAddressCity(this.addressCity);
-        user.setAddressNumber(this.addressNumber);
+        SetUpdatableFields(user);
         user.setBirthdate(this.birthdate);
-        user.setUserLogin(this.userLogin);
-        user.setEmail(this.email);
-        user.setAddressFlatNumber(this.addressFlatNumber);
-        user.setAddressPostalCode(this.addressPostalCode);
-        user.setDefaultAccount(null);
-        user.setAddressStreet(this.addressStreet);
-        user.setFirstName(this.firstName);
-        user.setLastName(this.lastName);
-        user.setUsesPhoneTransfer(this.usesPhoneTransfer);
-        user.setPhoneNumber(this.phoneNumber);
-        user.setAllowsMoneyRequests(this.allowsMoneyRequests);
         user.setCityOfBirth(this.cityOfBirth);
         user.setPesel(this.getPesel());
 

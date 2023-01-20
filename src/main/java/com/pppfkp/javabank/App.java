@@ -2,17 +2,13 @@ package com.pppfkp.javabank;
 
 import com.pppfkp.javabank.Data.Connection.HibernateConnectUtility;
 import com.pppfkp.javabank.Data.DTOs.UserDTO;
-import com.pppfkp.javabank.Data.Models.User;
 import com.pppfkp.javabank.Services.Repositories.UserRepository;
-import org.hibernate.Session;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import org.hibernate.query.Query;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
 
 public class App extends Application {
     @Override
@@ -58,16 +54,12 @@ public class App extends Application {
         }
         session.close();
         */
-
-
         //CREATE test
-        /*
         UserDTO newUser = new UserDTO("pppfkp1", "daniel", "wojtowicz", "kuba@gej.pl", true, "111111111", "01262201499", LocalDate.of(2001,10,5), true, "Słotowa", "Rzeszow", "33162", "Lukasiewicza", "2", "115", null, "21376969");
 
         Integer createdUserId = userRepository.CreateUser(newUser);
         System.out.println(createdUserId);
         //System.out.println(userRepository.GetUserById(100));
-        */
         /*
         for (var user : userRepository.GetAllUsers()) {
             System.out.println(user.getFirstName());
@@ -84,7 +76,7 @@ public class App extends Application {
 
         System.out.println(userRepository.DeleteUser(10));
         */
-        System.out.println(userRepository.authenticateUser("pppfkp1", "21376969"));
+        System.out.println(userRepository.AuthenticateUser("pppfkp1", "21376969"));
 
 
 

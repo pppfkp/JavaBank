@@ -6,6 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class UserRepository{
@@ -20,28 +21,27 @@ public class UserRepository{
 
     public Integer CreateUser(UserDTO dto)
     {
-        return baseRepository.CreateRecord(dto);
+        User newUser = dto.MapToEntityTypeNewRecord();
+        if (newUser == null || checkIfDuplicate(newUser)) {
+            return null;
+        }
+        return baseRepository.CreateRecord(newUser);
     }
-
     public User GetUserById(Integer id)
     {
         return baseRepository.GetSingleRecordById(id);
     }
-
     public List<User> GetAllUsers()
     {
         return baseRepository.GetAllRecords();
     }
-
     public boolean UpdateUser(UserDTO dto, Integer oldUserId)
     {
         return baseRepository.UpdateRecord(dto, oldUserId);
     }
-
     public boolean DeleteUser(Integer id) {
         return baseRepository.DeleteRecord(id);
     }
-
     public static User getCurrentUser() {
         return currentUser;
     }
@@ -53,7 +53,21 @@ public class UserRepository{
         session.close();
         return user;
     }
-    public boolean authenticateUser(String login, String password) {
+    private boolean checkIfDuplicate(User user) {
+        Session session = baseRepository.getSessionFactory().openSession();
+        List<String> userUniquePropertyNames = Arrays.asList("userLogin", "phoneNumber", "email", "pesel");
+        List<String> userUniqueProperties = Arrays.asList(user.getUserLogin(), user.getPhoneNumber(), user.getEmail(), user.getPesel());
+
+        for (int i = 0; i < userUniqueProperties.size(); ++i) {
+            User check = baseRepository.GetSingleRecordByFieldValue(userUniquePropertyNames.get(i), userUniqueProperties.get(i));
+            if (check != null) {
+                return true;
+            }
+        }
+        session.close();
+        return false;
+    }
+    public boolean AuthenticateUser(String login, String password) {
         User user = getUserByLogin(login);
         if (user == null) {
             return false;
