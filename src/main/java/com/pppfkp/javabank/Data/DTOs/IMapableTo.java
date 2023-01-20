@@ -5,5 +5,6 @@ import java.util.List;
 public interface IMapableTo<EntityType> {
     EntityType MapToEntityTypeNewRecord();
     EntityType MapToEntityTypeUpdateRecord(EntityType recordToUpdate);
-    List<String> Validate();
+    List<String> ValidateUpdatable();
+    List<String> ValidateAll();
 }

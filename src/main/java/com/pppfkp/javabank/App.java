@@ -59,14 +59,15 @@ public class App extends Application {
         session.close();
         */
 
-        /*
+
         //CREATE test
+        /*
         UserDTO newUser = new UserDTO("pppfkp1", "daniel", "wojtowicz", "kuba@gej.pl", true, "111111111", "01262201499", LocalDate.of(2001,10,5), true, "Słotowa", "Rzeszow", "33162", "Lukasiewicza", "2", "115", null, "21376969");
 
         Integer createdUserId = userRepository.CreateUser(newUser);
         System.out.println(createdUserId);
-*/
         //System.out.println(userRepository.GetUserById(100));
+        */
         /*
         for (var user : userRepository.GetAllUsers()) {
             System.out.println(user.getFirstName());
@@ -78,7 +79,18 @@ public class App extends Application {
 
         System.out.println(userRepository.UpdateUser(updatedUser, 10));
         */
+        /*
+        DELETE test
+
         System.out.println(userRepository.DeleteUser(10));
+        */
+        System.out.println(userRepository.authenticateUser("pppfkp1", "21376969"));
+
+
+
+
+
+
         HibernateConnectUtility.CloseConnection();
         System.exit(0);
     }

@@ -203,10 +203,7 @@ public class UserDTO implements IMapableTo<User> {
         user.setCityOfBirth(this.cityOfBirth);
         user.setPesel(this.getPesel());
 
-        //encrypt a password
-        String salt = BCrypt.gensalt(12);
-        byte[] passwordHash = BCrypt.hashpw(password, salt).getBytes();
-        user.setSalt(salt);
+        String passwordHash = BCrypt.hashpw(password, BCrypt.gensalt(12));
         user.setPasswordHash(passwordHash);
         return user;
     }
@@ -218,7 +215,13 @@ public class UserDTO implements IMapableTo<User> {
     }
 
     @Override
-    public List<String> Validate() {
+    public List<String> ValidateUpdatable() {
+        List<String> errorList = new ArrayList<String>();
+        return errorList;
+    }
+
+    @Override
+    public List<String> ValidateAll() {
         List<String> errorList = new ArrayList<String>();
         return errorList;
     }

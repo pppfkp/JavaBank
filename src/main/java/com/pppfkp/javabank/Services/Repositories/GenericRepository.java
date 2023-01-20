@@ -22,15 +22,16 @@ public class GenericRepository<DataType, DataDTOType extends IMapableTo<DataType
 
     //CREATE
     IdType CreateRecord(DataDTOType dto) {
-        List<String> validationErrors = dto.Validate();
+        List<String> validationErrors = dto.ValidateAll();
         Session session = sessionFactory.openSession();
+
         if (!validationErrors.isEmpty()) {
             session.close();
             return null;
         }
+
         DataType recordToCreate = dto.MapToEntityTypeNewRecord();
-        IdType result = (IdType)
-        session.save(recordToCreate);
+        IdType result = (IdType) session.save(recordToCreate);
         session.close();
         return result;
      }
@@ -49,13 +50,16 @@ public class GenericRepository<DataType, DataDTOType extends IMapableTo<DataType
         return results;
      }
     //UPDATE
+    //TODO check if success
     boolean UpdateRecord(DataDTOType dto, IdType id) {
-         List<String> validationErrors = dto.Validate();
+         List<String> validationErrors = dto.ValidateUpdatable();
          Session session = sessionFactory.openSession();
+
          if (!validationErrors.isEmpty()) {
              session.close();
              return false;
          }
+
          try {
              session.beginTransaction();
              DataType data = session.get(dataTypeClass, id);
@@ -64,6 +68,7 @@ public class GenericRepository<DataType, DataDTOType extends IMapableTo<DataType
          } finally {
              session.close();
          }
+         //check if the records are the same and return the result
          return true;
      }
     //DELETE
@@ -77,7 +82,6 @@ public class GenericRepository<DataType, DataDTOType extends IMapableTo<DataType
         } finally {
             session.close();
         }
-        //check if element still exists
-        return true;
+        return (GetSingleRecordById(id) == null);
      }
 }

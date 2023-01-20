@@ -1,6 +1,7 @@
 package com.pppfkp.javabank.Data.Models;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.NaturalId;
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
@@ -26,14 +27,12 @@ public class User {
     @Column(name = "LastName", nullable = false, length = 150)
     private String lastName;
 
+    @NaturalId
     @Column(name = "UserLogin", nullable = false, length = 50)
     private String userLogin;
 
     @Column(name = "PasswordHash", nullable = false)
-    private byte[] passwordHash;
-
-    @Column(name = "Salt", nullable = false)
-    private String salt;
+    private String passwordHash;
 
     @Column(name = "PhoneNumber", nullable = false, length = 9)
     private String phoneNumber;
@@ -113,20 +112,12 @@ public class User {
         this.userLogin = userLogin;
     }
 
-    public byte[] getPasswordHash() {
+    public String getPasswordHash() {
         return passwordHash;
     }
 
-    public void setPasswordHash(byte[] passwordHash) {
+    public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
     }
 
     public String getPhoneNumber() {
