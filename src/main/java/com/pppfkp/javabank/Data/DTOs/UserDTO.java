@@ -45,6 +45,25 @@ public class UserDTO implements IMapableTo<User> {
         this.password = password;
         this.cityOfBirth = cityOfBirth;
     }
+    public UserDTO(User user) {
+        this.userLogin = user.getUserLogin();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.email = user.getEmail();
+        this.usesPhoneTransfer = user.getUsesPhoneTransfer();
+        this.phoneNumber = user.getPhoneNumber();
+        this.pesel = user.getPesel();
+        this.birthdate = user.getBirthdate();
+        this.allowsMoneyRequests = user.getAllowsMoneyRequests();
+        this.addressCity = user.getAddressCity();
+        this.addressPostalCode = user.getAddressPostalCode();
+        this.addressStreet = user.getAddressStreet();
+        this.addressNumber = user.getAddressNumber();
+        this.addressFlatNumber = user.getAddressFlatNumber();
+        this.defaultAccount = user.getDefaultAccount();
+        this.password = "";
+        this.cityOfBirth = user.getCityOfBirth();
+    }
 
     public String getPassword() {
         return password;
@@ -190,7 +209,7 @@ public class UserDTO implements IMapableTo<User> {
         user.setBirthdate(this.birthdate);
         user.setCityOfBirth(this.cityOfBirth);
         user.setPesel(this.getPesel());
-
+        user.setSoftDeleted(false);
         String passwordHash = BCrypt.hashpw(password, BCrypt.gensalt(12));
         user.setPasswordHash(passwordHash);
         return user;
@@ -214,6 +233,10 @@ public class UserDTO implements IMapableTo<User> {
         List<String> errorList = new ArrayList<String>();
         return errorList;
     }
+    public List<String> ValidatePassword() {
+        List<String> errorList = new ArrayList<>();
+        return errorList;
+    }
 
     private void setUpdatableFields(User user) {
         user.setAddressCity(this.addressCity);
@@ -229,5 +252,10 @@ public class UserDTO implements IMapableTo<User> {
         user.setUsesPhoneTransfer(this.usesPhoneTransfer);
         user.setPhoneNumber(this.phoneNumber);
         user.setAllowsMoneyRequests(this.allowsMoneyRequests);
+    }
+
+    public List<String> ValidateLogin() {
+        List<String> errorList = new ArrayList<>();
+        return errorList;
     }
 }

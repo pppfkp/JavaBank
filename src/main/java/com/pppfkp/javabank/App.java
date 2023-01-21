@@ -2,14 +2,16 @@ package com.pppfkp.javabank;
 
 import com.pppfkp.javabank.Data.Connection.HibernateConnectUtility;
 import com.pppfkp.javabank.Data.DTOs.AccountDTO;
+import com.pppfkp.javabank.Data.DTOs.TransactionDTO;
 import com.pppfkp.javabank.Data.DTOs.UserDTO;
 import com.pppfkp.javabank.Data.Models.Account;
 import com.pppfkp.javabank.Data.Models.AccountType;
 import com.pppfkp.javabank.Repositories.AccountRepository;
 import com.pppfkp.javabank.Repositories.AccountTypeRepository;
+import com.pppfkp.javabank.Repositories.TransactionRepository;
 import com.pppfkp.javabank.Repositories.UserRepository;
 
-import com.pppfkp.javabank.Services.SignInService;
+import com.pppfkp.javabank.Services.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.hibernate.SessionFactory;
@@ -36,6 +38,10 @@ public class App extends Application {
         AccountRepository accountRepository = new AccountRepository(HibernateConnectUtility.getSessionFactory());
         AccountTypeRepository accountTypeRepository = new AccountTypeRepository(HibernateConnectUtility.getSessionFactory());
         SignInService signInService = new SignInService(userRepository);
+        AccountMoneyService accountMoneyService = new AccountMoneyService(accountRepository);
+        UserAccountManagementService userAccountManagementService = new UserAccountManagementService(userRepository, accountRepository);
+        TransactionRepository transactionRepository = new TransactionRepository(HibernateConnectUtility.getSessionFactory());
+        AccountManagementService accountManagementService = new AccountManagementService(accountRepository, accountTypeRepository);
         //launch();
         /*
         String connectionUrl = "jdbc:sqlserver://pppfkp-university-java.database.windows.net:1433;database=JAVA_BANK;user=pppfkp@pppfkp-university-java;password=Password2137;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
@@ -100,6 +106,7 @@ public class App extends Application {
         accountRepository.UpdateAccount(updateAccount, "81200112344175603185079988");
         */
 
+        /*
         List<Account> accounts = accountRepository.GetAllAccountsByUserId(23);
         for (var account:
              accounts) {
@@ -110,8 +117,22 @@ public class App extends Application {
         System.out.println(userRepository.GetUserById(23).getSoftDeleted());
 
         accountRepository.ChangeBalance(new BigDecimal(69000), "81200112344175603185079988");
-
+        */
+        //System.out.println(accountMoneyService.DepositMoneyOnAccount(new BigDecimal(150), "84200112347950437514944958"));
+        //System.out.println(accountMoneyService.WithdrawMoneyFromAccount(new BigDecimal(1), "84200112347950437514944958"));
+        //userAccountManagementService.CloseUserAccount(23);
+        //UserDTO newUser1 = new UserDTO("pppfkp", "filip", "lepa", "filip@spoko.pl", true, "668431600", "01262201439", LocalDate.of(2001,6,22), true, "Tarnów", "Wola Lubecka", "33162", "Lukasiewicza", "71", "1", null, "Password");
+        //SignUpService signUpService = new SignUpService(userRepository, accountRepository);
+        //signUpService.SignUp(newUser1);
+        System.out.println(signInService.SignIn("pppfkp", "Password"));
+        //AccountDTO newAccount = new AccountDTO(new BigDecimal(2000), accountTypeRepository.GetAccountTypeById(2), userRepository.GetUserById(25));
+        //accountManagementService.OpenAccount(newAccount);
+        //TransactionDTO transactionDTO = new()
+        //transactionRepository.CreateTransaction();
+        TransactionDTO transactionDTO = new TransactionDTO(accountRepository.GetAccountById("57200112342056355024193255") ,accountRepository.GetAccountById("81200112344175603185079988"), new BigDecimal(1000), "to dla cb fikip");
+        transactionRepository.CreateTransaction(transactionDTO);
         HibernateConnectUtility.CloseConnection();
+
         System.exit(0);
     }
 }

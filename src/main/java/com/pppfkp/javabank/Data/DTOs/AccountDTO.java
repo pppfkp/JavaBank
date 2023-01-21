@@ -11,6 +11,7 @@ import java.util.Random;
 
 public class AccountDTO implements IMapableTo<Account> {
     private BigDecimal transferLimit;
+    private BigDecimal balance;
     private AccountType accountType;
     private User user;
 
@@ -18,6 +19,13 @@ public class AccountDTO implements IMapableTo<Account> {
         this.transferLimit = transferLimit;
         this.accountType = accountType;
         this.user = user;
+    }
+
+    public AccountDTO(Account account) {
+        this.accountType = account.getAccountType();
+        this.transferLimit = account.getTransferLimit();
+        this.user = account.getUser();
+        this.balance = account.getBalance();
     }
 
 
@@ -37,6 +45,14 @@ public class AccountDTO implements IMapableTo<Account> {
         this.accountType = accountType;
     }
 
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
     @Override
     public Account MapToEntityTypeNewRecord() {
         if(!ValidateAll().isEmpty()) return null;
@@ -45,6 +61,7 @@ public class AccountDTO implements IMapableTo<Account> {
         account.setId(generateAccountNumber());
         account.setUser(this.user);
         account.setBalance(new BigDecimal(0));
+        account.setSoftDeleted(false);
         return account;
     }
 
@@ -69,6 +86,7 @@ public class AccountDTO implements IMapableTo<Account> {
     private void setUpdatableFields(Account account) {
         account.setTransferLimit(this.transferLimit);
         account.setAccountType(this.accountType);
+        account.setBalance(this.balance);
     }
    private String generateAccountNumber() {
         Random rand = new Random();

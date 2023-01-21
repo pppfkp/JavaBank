@@ -26,16 +26,12 @@ public class GenericRepository<DataType, DataDTOType extends IMapableTo<DataType
     //CREATE
     IdType CreateRecord(DataDTOType dto) {
         List<String> validationErrors = dto.ValidateAll();
-        Session session = sessionFactory.openSession();
 
         if (!validationErrors.isEmpty()) {
-            session.close();
             return null;
         }
-
         DataType recordToCreate = dto.MapToEntityTypeNewRecord();
-        IdType result = (IdType) session.save(recordToCreate);
-        session.close();
+        IdType result = (IdType) CreateRecord(recordToCreate);
         return result;
      }
     IdType CreateRecord(DataType data) {
@@ -101,6 +97,29 @@ public class GenericRepository<DataType, DataDTOType extends IMapableTo<DataType
                  return false;
              }
              dto.MapToEntityTypeUpdateRecord(data);
+             session.getTransaction().commit();
+         } finally {
+             session.close();
+         }
+         //check if the records are the same and return the result
+         return true;
+     }
+     boolean UpdateRecord(DataType data) {
+         Session session = sessionFactory.openSession();
+
+         if (!validationErrors.isEmpty()) {
+             session.close();
+             return false;
+         }
+
+         try {
+             session.beginTransaction();
+             if (data == null) {
+                 session.getTransaction().rollback();
+                 session.close();
+                 return false;
+             }
+             session.update(data);
              session.getTransaction().commit();
          } finally {
              session.close();

@@ -1,11 +1,16 @@
 package com.pppfkp.javabank.Data.DTOs;
 
 import com.pppfkp.javabank.Data.Models.Account;
+import com.pppfkp.javabank.Data.Models.Transaction;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
-public class TransactionDTO {
+public class TransactionDTO implements IMapableTo<Transaction> {
     private Instant transactionDate;
 
     private Account recipientAccount;
@@ -16,8 +21,8 @@ public class TransactionDTO {
 
     private String title;
 
-    public TransactionDTO(Instant transactionDate, Account recipientAccount, Account senderAccount, BigDecimal ammount, String title) {
-        this.transactionDate = transactionDate;
+    public TransactionDTO(Account recipientAccount, Account senderAccount, BigDecimal ammount, String title) {
+        this.transactionDate = null;
         this.recipientAccount = recipientAccount;
         this.senderAccount = senderAccount;
         this.ammount = ammount;
@@ -62,5 +67,38 @@ public class TransactionDTO {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @Override
+    public Transaction MapToEntityTypeNewRecord() {
+        if (!ValidateAll().isEmpty()) return null;
+        Transaction transaction = new Transaction();
+        transaction.setAmmount(this.ammount);
+        transaction.setTitle(this.title);
+        transaction.setRecipientAccount(this.recipientAccount);
+        transaction.setTransactionDate(LocalDate.now());
+        transaction.setTitle(this.title);
+        transaction.setSenderAccount(this.senderAccount);
+        transaction.setRecipientAccountPostTransactionBalance(recipientAccount.getBalance().add(this.ammount));
+        transaction.setSenderAccountPostTransactionBalance(senderAccount.getBalance().subtract(this.ammount));
+        //transaction.setId(UUID.randomUUID());
+        return transaction;
+    }
+
+    @Override
+    public Transaction MapToEntityTypeUpdateRecord(Transaction recordToUpdate) {
+        return null;
+    }
+
+    @Override
+    public List<String> ValidateUpdatable() {
+        List<String> errorList = new ArrayList<String>();
+        return errorList;
+    }
+
+    @Override
+    public List<String> ValidateAll() {
+        List<String> errorList = new ArrayList<String>();
+        return errorList;
     }
 }

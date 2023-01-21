@@ -18,7 +18,7 @@ public class UserRepository{
         this.sessionFactory = sessionFactory;
         this.baseRepository = new GenericRepository<>(sessionFactory, User.class);
     }
-
+    //TODO add soft delete check
     public Integer CreateUser(UserDTO dto)
     {
         User newUser = dto.MapToEntityTypeNewRecord();
@@ -29,7 +29,9 @@ public class UserRepository{
     }
     public User GetUserById(Integer id)
     {
-        return baseRepository.GetSingleRecordById(id);
+        User user = baseRepository.GetSingleRecordById(id);
+        if (user.getSoftDeleted()) return null;
+        return user;
     }
     public List<User> GetAllUsers()
     {
@@ -38,6 +40,9 @@ public class UserRepository{
     public boolean UpdateUser(UserDTO dto, Integer oldUserId)
     {
         return baseRepository.UpdateRecord(dto, oldUserId);
+    }
+    public boolean UpdateUser(User user) {
+        return baseRepository.UpdateRecord(user);
     }
     public boolean DeleteUser(Integer id) {
         return baseRepository.DeleteRecord(id);

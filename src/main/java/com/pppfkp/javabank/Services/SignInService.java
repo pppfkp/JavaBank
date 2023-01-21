@@ -6,6 +6,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 public class SignInService {
     private UserRepository userRepository;
+    //TODO add list of errors??
     private static User currentUser;
 
     public SignInService(UserRepository userRepository) {
@@ -20,7 +21,7 @@ public class SignInService {
             return  false;
         }
     }
-    public User getCurrentUser() {
+    public static User getCurrentUser() {
         return currentUser;
     }
 }
