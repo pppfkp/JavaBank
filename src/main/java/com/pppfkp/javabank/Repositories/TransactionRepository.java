@@ -39,6 +39,7 @@ public class TransactionRepository {
         return transactions;
     }
     public Transaction CreateTransaction(TransactionDTO dto) {
+        if (!dto.ValidateAll().isEmpty()) return null;
         String id = baseRepository.CreateRecord(dto);
         return GetTransactionById(id);
     }

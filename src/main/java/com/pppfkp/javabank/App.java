@@ -129,8 +129,10 @@ public class App extends Application {
         //accountManagementService.OpenAccount(newAccount);
         //TransactionDTO transactionDTO = new()
         //transactionRepository.CreateTransaction();
-        TransactionDTO transactionDTO = new TransactionDTO(accountRepository.GetAccountById("57200112342056355024193255") ,accountRepository.GetAccountById("81200112344175603185079988"), new BigDecimal(1000), "to dla cb fikip");
-        transactionRepository.CreateTransaction(transactionDTO);
+        TransactionService transactionService = new TransactionService(transactionRepository,accountRepository,accountMoneyService);
+        TransactionDTO transactionDTO = new TransactionDTO(accountRepository.GetAccountById("57200112342056355024193255") ,
+        accountRepository.GetAccountById("81200112344175603185079988"), new BigDecimal(1000), "to dla cb fikip");
+        System.out.println(transactionService.MakeTransaction(transactionDTO).getAmmount());
         HibernateConnectUtility.CloseConnection();
 
         System.exit(0);

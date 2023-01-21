@@ -20,6 +20,7 @@ public class AccountMoneyService {
     }
 
     public BigDecimal WithdrawMoneyFromAccount(BigDecimal ammountToWithdraw, String accountId) {
+        //TODO use ChangeBalanceFunction from account repository
 
         Account account = accountRepository.GetAccountById(accountId);
         if (account == null) {

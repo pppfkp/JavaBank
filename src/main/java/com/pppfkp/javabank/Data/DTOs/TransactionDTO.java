@@ -99,6 +99,9 @@ public class TransactionDTO implements IMapableTo<Transaction> {
     @Override
     public List<String> ValidateAll() {
         List<String> errorList = new ArrayList<String>();
+        if (recipientAccount.getId() == senderAccount.getId()) {
+            errorList.add("Konta adresata i odbiorcy nie mogą być takie same!");
+        }
         return errorList;
     }
 }
