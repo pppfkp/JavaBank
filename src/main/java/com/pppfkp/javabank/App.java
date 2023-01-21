@@ -1,5 +1,6 @@
 package com.pppfkp.javabank;
 
+import com.pppfkp.javabank.Data.Cache.CurrentUserAppState;
 import com.pppfkp.javabank.Data.Connection.HibernateConnectUtility;
 import com.pppfkp.javabank.Data.DTOs.AccountDTO;
 import com.pppfkp.javabank.Data.DTOs.TransactionDTO;
@@ -124,15 +125,20 @@ public class App extends Application {
         //UserDTO newUser1 = new UserDTO("pppfkp", "filip", "lepa", "filip@spoko.pl", true, "668431600", "01262201439", LocalDate.of(2001,6,22), true, "Tarnów", "Wola Lubecka", "33162", "Lukasiewicza", "71", "1", null, "Password");
         //SignUpService signUpService = new SignUpService(userRepository, accountRepository);
         //signUpService.SignUp(newUser1);
-        System.out.println(signInService.SignIn("pppfkp", "Password"));
+        //System.out.println(signInService.SignIn("pppfkp", "Password"));
         //AccountDTO newAccount = new AccountDTO(new BigDecimal(2000), accountTypeRepository.GetAccountTypeById(2), userRepository.GetUserById(25));
         //accountManagementService.OpenAccount(newAccount);
         //TransactionDTO transactionDTO = new()
         //transactionRepository.CreateTransaction();
-        TransactionService transactionService = new TransactionService(transactionRepository,accountRepository,accountMoneyService);
-        TransactionDTO transactionDTO = new TransactionDTO(accountRepository.GetAccountById("57200112342056355024193255") ,
-        accountRepository.GetAccountById("81200112344175603185079988"), new BigDecimal(1000), "to dla cb fikip");
-        System.out.println(transactionService.MakeTransaction(transactionDTO).getAmmount());
+        //TransactionService transactionService = new TransactionService(transactionRepository,accountRepository,accountMoneyService);
+        //TransactionDTO transactionDTO = new TransactionDTO(accountRepository.GetAccountById("57200112342056355024193255") ,
+        //accountRepository.GetAccountById("81200112344175603185079988"), new BigDecimal(1000), "to dla cb fikip");
+        //System.out.println(transactionService.MakeTransaction(transactionDTO).getAmmount());
+        System.out.println(CurrentUserAppState.getUser());
+        signInService.SignIn("pppfkp", "Password");
+        System.out.println(CurrentUserAppState.getUser());
+        signInService.SignOut();
+        System.out.println(CurrentUserAppState.getUser());
         HibernateConnectUtility.CloseConnection();
 
         System.exit(0);
