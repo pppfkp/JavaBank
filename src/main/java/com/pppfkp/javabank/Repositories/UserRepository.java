@@ -66,7 +66,7 @@ public class UserRepository{
     }
     public boolean AuthenticateUser(String login, String password) {
         User user = getUserByLogin(login);
-        if (user == null) {
+        if (!CheckIfExists(login)) {
             return false;
         }
         return BCrypt.checkpw(password, user.getPasswordHash());
@@ -84,5 +84,12 @@ public class UserRepository{
             session.close();
         }
         return  true;
+    }
+    public boolean CheckIfExists(String login) {
+        User user = getUserByLogin(login);
+        if (user == null || user.getSoftDeleted()) {
+            return false;
+        }
+        return true;
     }
 }

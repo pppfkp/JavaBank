@@ -20,7 +20,6 @@ public class SignInService {
             return  false;
         }
     }
-
     public User getCurrentUser() {
         return currentUser;
     }
