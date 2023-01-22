@@ -1,7 +1,9 @@
 package com.pppfkp.javabank.Data.DTOs;
 
+import com.pppfkp.javabank.Data.Connection.HibernateConnectUtility;
 import com.pppfkp.javabank.Data.Models.Account;
 import com.pppfkp.javabank.Data.Models.Transaction;
+import com.pppfkp.javabank.Repositories.AccountRepository;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -11,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class TransactionDTO implements IMapableTo<Transaction> {
+    private AccountRepository accountRepository;
     private Instant transactionDate;
 
     private Account recipientAccount;
@@ -22,9 +25,19 @@ public class TransactionDTO implements IMapableTo<Transaction> {
     private String title;
 
     public TransactionDTO(Account recipientAccount, Account senderAccount, BigDecimal ammount, String title) {
+        accountRepository = new AccountRepository(HibernateConnectUtility.getSessionFactory());
         this.transactionDate = null;
         this.recipientAccount = recipientAccount;
         this.senderAccount = senderAccount;
+        this.ammount = ammount;
+        this.title = title;
+    }
+
+    public TransactionDTO(String recipientAccountId, String senderAccountId, BigDecimal ammount, String title) {
+        accountRepository = new AccountRepository(HibernateConnectUtility.getSessionFactory());
+        this.transactionDate = null;
+        this.recipientAccount = accountRepository.GetAccountById(recipientAccountId);
+        this.senderAccount = accountRepository.GetAccountById(senderAccountId);
         this.ammount = ammount;
         this.title = title;
     }
@@ -101,6 +114,9 @@ public class TransactionDTO implements IMapableTo<Transaction> {
         List<String> errorList = new ArrayList<String>();
         if (recipientAccount.getId() == senderAccount.getId()) {
             errorList.add("Konta adresata i odbiorcy nie mogą być takie same!");
+        }
+        if (senderAccount.getBalance().compareTo(ammount) < 0) {
+            errorList.add("Nie masz wystarczających środków na koncie.");
         }
         return errorList;
     }

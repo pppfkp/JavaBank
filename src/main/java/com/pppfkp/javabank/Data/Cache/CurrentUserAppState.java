@@ -2,9 +2,11 @@ package com.pppfkp.javabank.Data.Cache;
 
 import com.pppfkp.javabank.Data.Connection.HibernateConnectUtility;
 import com.pppfkp.javabank.Data.Models.Account;
+import com.pppfkp.javabank.Data.Models.AccountType;
 import com.pppfkp.javabank.Data.Models.Transaction;
 import com.pppfkp.javabank.Data.Models.User;
 import com.pppfkp.javabank.Repositories.AccountRepository;
+import com.pppfkp.javabank.Repositories.AccountTypeRepository;
 import com.pppfkp.javabank.Repositories.TransactionRepository;
 import com.pppfkp.javabank.Services.SignInService;
 
@@ -14,16 +16,20 @@ import java.util.List;
 public class CurrentUserAppState {
     private static AccountRepository accountRepository;
     private static TransactionRepository transactionRepository;
+    private static AccountTypeRepository accountTypeRepository;
     private static User user;
     private static List<Account> accounts;
     private static List<Transaction> transactionsFrom;
     private static List<Transaction> transactionsTo;
+    private static List<AccountType> accountTypes;
 
     public static void Refresh() {
         user = SignInService.getCurrentUser();
         if (user == null) return;
         RefreshAccounts();
         RefreshTransactions();
+        RefreshAccountTypes();
+
     }
     public static void Clear() {
         user = null;
@@ -51,6 +57,11 @@ public class CurrentUserAppState {
         transactionRepository = null;
     }
 
+    public static void RefreshAccountTypes() {
+        accountTypeRepository = new AccountTypeRepository(HibernateConnectUtility.getSessionFactory());
+        accountTypes = accountTypeRepository.GetAccountTypes();
+        accountTypeRepository = null;
+    }
     public static void RefreshTransactionsFrom() {
         if (user == null) return;
         transactionRepository = new TransactionRepository(HibernateConnectUtility.getSessionFactory());
@@ -79,5 +90,9 @@ public class CurrentUserAppState {
 
     public static List<Transaction> getTransactionsTo() {
         return transactionsTo;
+    }
+
+    public static List<AccountType> getAccountTypes() {
+        return accountTypes;
     }
 }

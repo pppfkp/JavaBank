@@ -19,6 +19,7 @@ public class SignInService {
     }
 
     public boolean SignIn(String login, String password) {
+        SignOut();
         errors.clear();
         boolean authenticationResult =  userRepository.AuthenticateUser(login, password);
         if (authenticationResult) {

@@ -11,6 +11,4 @@ module com.pppfkp.javabank {
     opens com.pppfkp.javabank to javafx.fxml;
     opens com.pppfkp.javabank.Data.Models;
     exports com.pppfkp.javabank;
-    exports com.pppfkp.javabank.Controllers;
-    opens com.pppfkp.javabank.Controllers to javafx.fxml;
 }

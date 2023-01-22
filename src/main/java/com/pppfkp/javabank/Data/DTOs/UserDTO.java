@@ -64,6 +64,26 @@ public class UserDTO implements IMapableTo<User> {
         this.password = "";
         this.cityOfBirth = user.getCityOfBirth();
     }
+    public UserDTO(String login, String password, String firstName, String lastName, String phoneNumber, String pesel, String email, LocalDate birthdate) {
+        this.userLogin = login;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.pesel = pesel;
+        this.email = email;
+        this.usesPhoneTransfer = true;
+        this.birthdate = birthdate;
+        this.allowsMoneyRequests = true;
+        this.addressCity = "Miasto";
+        this.addressPostalCode = "33160";
+        this.addressStreet = "addressStreet";
+        this.addressNumber = "1";
+        this.addressFlatNumber = "1";
+        this.defaultAccount = null;
+        this.password = password;
+        this.cityOfBirth = "Miasto";
+    }
 
     public String getPassword() {
         return password;

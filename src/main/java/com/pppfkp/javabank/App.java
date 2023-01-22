@@ -28,9 +28,8 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("Views/AuthorizationScreen.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("AuthorizationScreen.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1440, 900);
-        scene.getStylesheets().add(getClass().getResource("Stylesheets/AuthorizationScreen.css").toExternalForm());
         stage.setTitle("Hello!");
         stage.setMaximized(true);
         //stage.setFullScreen(true);
@@ -44,11 +43,15 @@ public class App extends Application {
         AccountRepository accountRepository = new AccountRepository(HibernateConnectUtility.getSessionFactory());
         AccountTypeRepository accountTypeRepository = new AccountTypeRepository(HibernateConnectUtility.getSessionFactory());
         SignInService signInService = new SignInService(userRepository);
-        AccountMoneyService accountMoneyService = new AccountMoneyService(accountRepository);
+        //AccountMoneyService accountMoneyService = new AccountMoneyService(accountRepository);
         UserAccountManagementService userAccountManagementService = new UserAccountManagementService(userRepository, accountRepository);
         TransactionRepository transactionRepository = new TransactionRepository(HibernateConnectUtility.getSessionFactory());
         AccountManagementService accountManagementService = new AccountManagementService(accountRepository, accountTypeRepository);
         launch();
+
+        AccountMoneyService accountMoneyService = new AccountMoneyService(new AccountRepository(HibernateConnectUtility.getSessionFactory()));
+        accountMoneyService.WithdrawMoneyFromAccount(new BigDecimal(1000), "81200112344175603185079988");
+
 
 
         HibernateConnectUtility.CloseConnection();

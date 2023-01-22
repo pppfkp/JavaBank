@@ -101,13 +101,12 @@ public class GenericRepository<DataType, DataDTOType extends IMapableTo<DataType
          } finally {
              session.close();
          }
-         //check if the records are the same and return the result
          return true;
      }
      boolean UpdateRecord(DataType data) {
          Session session = sessionFactory.openSession();
 
-         if (!validationErrors.isEmpty()) {
+         if (validationErrors == null || !validationErrors.isEmpty()) {
              session.close();
              return false;
          }
